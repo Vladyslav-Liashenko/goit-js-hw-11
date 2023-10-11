@@ -1,2 +1,0 @@
-.loader{width:48px;height:24px;color:#000;box-sizing:border-box;border:1px solid;animation:fillX 2s linear infinite;display:inline-block;position:relative}.loader:after{content:"";box-sizing:border-box;width:5px;height:12px;background:#000;position:absolute;top:50%;left:100%;transform:translateY(-50%)}@keyframes fillX{0%{box-shadow:inset 0 0}to{box-shadow:inset 48px 0}}img{width:50%;height:50%;display:block}.breed-select{margin-bottom:20px}.cat-card{gap:15px;display:flex}h2{margin-top:0}
-/*# sourceMappingURL=index.3a377eb3.css.map */
