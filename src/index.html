@@ -9,10 +9,17 @@
   <body>
     
     <form class="search-form" id="search-form">
-      <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
-      <button type="submit">Search</button>
+      <div class="onform">
+        <input type="text" class="searchQuery" 
+        name="searchQuery" 
+        autocomplete="off" 
+        placeholder="Search images..." />
+        <button type="submit" class="searchBtn">
+          <img src="./search-svgrepo-com.svg" alt="search" width="20" height="20">
+        </button>
+      </div>
     </form>
-
     <script src="index.js" type="module"></script>
+    <script src="api.js" type="module"></script>
   </body>
 </html>
