@@ -3,14 +3,12 @@ import Notiflix from 'notiflix';
 
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '39984846-5bc4e2c56e6d5349f3486ddeb';
-let q = '';
 const IMAGE_TYPE = 'photo';
 const ORIENTATION = 'horizontal';
 const SAFESEARCH = 'true';
-let page;
-let per_page = 40;
 
-export function getData(q) {
+
+export function getData(q, page, per_page) {
   const params = new URLSearchParams({
     q: q,
     image_type: IMAGE_TYPE,

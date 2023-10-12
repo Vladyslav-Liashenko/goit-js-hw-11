@@ -7,6 +7,9 @@ const searchInput = document.querySelector('.searchQuery');
 const serachBtn = document.querySelector('.searchBtn');
 const gallery = document.querySelector('.gallery');
 const loadeMore = document.querySelector('.loadmore');
+let q = '';
+let page;
+let per_page = 40;
 
 // Запуск отрисовки по клику поиск
 serachBtn.addEventListener('click', function () {
@@ -15,7 +18,7 @@ serachBtn.addEventListener('click', function () {
   gallery.innerHTML = '';
   page = 1;
   
-  getData(q)
+  getData(q, page, per_page)
     .then(data => {
       const totalHits = data.totalHits;
       const message = `Hooray! We found ${totalHits} images.`;
