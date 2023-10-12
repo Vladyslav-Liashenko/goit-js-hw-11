@@ -15,3 +15,24 @@ body {
 button {
     padding: 3px 5px;
 }
+.gallery{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.info{
+    display: flex;
+    justify-content: space-around;
+}
+.info-item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.photo-card {
+    border: 1px solid rgb(209, 208, 208);
+}
+.loadmore {
+    visibility: hidden;
+}
