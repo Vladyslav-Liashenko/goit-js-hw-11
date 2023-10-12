@@ -1,7 +1,7 @@
-import { getData } from './api.js'
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
+import { getData } from './api.js';
 
 const searchInput = document.querySelector('.searchQuery');
 const serachBtn = document.querySelector('.searchBtn');

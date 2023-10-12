@@ -7,7 +7,6 @@ const IMAGE_TYPE = 'photo';
 const ORIENTATION = 'horizontal';
 const SAFESEARCH = 'true';
 
-
 export function getData(q, page, per_page) {
   const params = new URLSearchParams({
     q: q,
