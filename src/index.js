@@ -8,35 +8,55 @@ const serachBtn = document.querySelector('.searchBtn');
 const gallery = document.querySelector('.gallery');
 const loadeMore = document.querySelector('.loadmore');
 let q = '';
-let page;
-let per_page = 40;
+let page = 0;
+const per_page = 40;
+const maxRecords = 500;
+const total = maxRecords / per_page;
 
-// Запуск отрисовки по клику поиск
-serachBtn.addEventListener('click', function () {
+serachBtn.addEventListener('click', async () => {
   event.preventDefault();
+  page = 1;
   q = searchInput.value;
+
+  if (!q) return;
+
   gallery.innerHTML = '';
   page = 1;
-  
-  getData(q, page, per_page)
-    .then(data => {
-      const totalHits = data.totalHits;
-      const message = `Hooray! We found ${totalHits} images.`;
-      Notiflix.Notify.success(message);
-      gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      loadeMore.style.visibility = 'visible';
-      lightbox = new SimpleLightbox('.gallery a');
-      lightbox.refresh();
-      scrollPageSmoothly();
-    })
-    .catch(err => console.log(err));
+
+  try {
+    const data = await getData(q, page, per_page);
+    const { total, totalHits, hits } = data;
+    if (!total) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
+    }
+    const message = 'Hooray! We found ${totalHits} images.';
+    Notiflix.Notify.success(message);
+    gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
+    loadeMore.style.visibility = 'visible';
+    lightbox = new SimpleLightbox('.gallery a');
+    lightbox.refresh();
+    scrollPageSmoothly();
+  } catch (e) {
+    console.log(e);
+  }
 });
 
-// РАЗМЕТКА
-function createMarkup({ hits }) {
-  return hits.map(
-    ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-      return `
+function createMarkup(hits) {
+  return hits
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `
         <a href="${largeImageURL}" class="image-link">
           <div class="photo-card">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" data-src="${largeImageURL}"/>
@@ -61,29 +81,14 @@ function createMarkup({ hits }) {
           </div>
         </a>
       `;
-    })
-    .join("");
-}
-loadeMore.addEventListener('click', function () {
-  page += 1;
-  per_page += 40;
-
-  getData(q)
-    .then(data => {
-      gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-
-      if (data.hits.length < data.totalHits) {
-        loadeMore.style.visibility = 'hidden';
-        Notiflix.Notify.failure(
-          'We are sorry, but you have reached the end of search results.'
-        );
-        lightbox.refresh();
-        scrollPageSmoothly();
       }
-    })
-    .catch(err => console.log(err));
+    )
+    .join('');
+}
+loadeMore.addEventListener('click', async () => {
+  page += 1;
 });
-// СКРОЛ
+
 function scrollPageSmoothly() {
   const { height: cardHeight } = document
     .querySelector('.gallery')
@@ -95,21 +100,28 @@ function scrollPageSmoothly() {
   });
 }
 
-// Слушаем событие прокрутки страницы
-window.addEventListener('scroll', () => {
-  // Если пользователь долистал до нижней части страницы
-  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+window.addEventListener('scroll', async () => {
+
+  if (
+    window.innerHeight + window.scrollY >=
+    document.documentElement.scrollHeight
+  ) {
+    if (page > total) {
+      loadeMore.style.display = 'none';
+      Notiflix.Notify.failure(
+        'We are sorry, but you have reached the end of search results.'
+      );
+      return;
+    }
     page += 1;
-    per_page += 40;
 
-    getData(q)
-      .then(data => {
-        gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-
-        if (data.hits.length < data.totalHits) {
-          Notiflix.Notify.failure('We are sorry, but you have reached the end of search results.');
-        }
-      })
-      .catch(err => console.log(err));
+    try{
+      const data = await getData(q, page, per_page);
+      const { hits } = data;
+      gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
+      
+    }catch(e){
+      console.log(e)
+    }
   }
 });

@@ -35,4 +35,6 @@ button {
 }
 .loadmore {
     visibility: hidden;
+    display: flex;
+    margin: 20px auto;
 }
